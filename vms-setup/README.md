@@ -2,7 +2,7 @@
 
 This guide will demonstrate how to set up a small **cluster** of virtual machines on a local machine using VirtualBox.
 
-At first, the VMs will be independent of each other, and the plan is to subsequently setup a Kubernetes cluster in order to experiment with it.
+At first, the VMs will be independent of each other, and the plan is to subsequently set up a Kubernetes cluster in order to experiment with it.
 
 ## VM setup
 
@@ -35,10 +35,10 @@ For each VM, repeat the steps below:
 
 ### SSH
 
-Log in to the VMs and install `net-tools` and `openssh-server` using the following command:
+Log in to the VMs and install `nano`, `net-tools` and `openssh-server` using the following command:
 
 ```bash
-sudo apt-get update && sudo apt-get install -y net-tools openssh-server
+sudo apt-get update && sudo apt-get install -y nano net-tools openssh-server
 ```
 
 To ensure that the SSH service starts automatically at boot, run:
@@ -89,10 +89,16 @@ If you try to SSH into the VM without using the private key, you should receive 
 
 ## Network
 
-To set a static IP address, run the following commands (remember to **change** the IP address):
+To set a static IP address, create `/etc/netplan/01-netcfg.yaml` running the following command:
 
 ```bash
-printf "network:
+sudo nano /etc/netplan/01-netcfg.yaml
+```
+
+Then update the content with the following (remember to **change** the IP address):
+
+```yaml
+network:
   version: 2
   renderer: networkd
   ethernets:
@@ -105,12 +111,16 @@ printf "network:
           via: 192.168.1.1
       nameservers:
           addresses: [8.8.8.8, 1.1.1.1, 192.168.1.1]
-" | sudo tee /etc/netplan/01-netcfg.yaml &>/dev/null
+```
+
+> The interface name may be different, you can find it by running the command `ifconfig`. Example: [01-netcfg.yaml](./01-netcfg.yaml)
+
+Finally, to apply the changes, run the following commands:
+
+```bash
 sudo chmod 600 /etc/netplan/*
 sudo netplan apply
 ```
-
-> The interface name may be different, you can find it by running the command `ifconfig`.
 
 Note: If you lose network connectivity after applying the new configuration, check for errors in the netplan configuration file and revert to the previous configuration if necessary.
 
@@ -118,7 +128,7 @@ Note: If you lose network connectivity after applying the new configuration, che
 
 To simplify the process of connecting via SSH to the different VMs, it is recommended to add their information to the local SSH configuration file, which is located at `~/.ssh/config`. Based on the network diagram provided above, the configuration file would look something like this:
 
-```conf
+```ssh-config
 Host master
   HostName 192.168.1.190
   AddKeysToAgent yes
@@ -146,11 +156,11 @@ all:
   children:
     master:
       hosts:
-        192.168.1.190
+        192.168.1.190:
     nodes:
       hosts:
-        192.168.1.191
-        192.168.1.192
+        192.168.1.191:
+        192.168.1.192:
 ```
 
 > Example: [inventory.yaml](./inventory.yaml)
