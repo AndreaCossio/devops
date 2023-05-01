@@ -43,3 +43,6 @@ You can also try to ping all the hosts:
 ```bash
 ansible all -m ping
 ```
+
+## Kubernetes playbooks
+
