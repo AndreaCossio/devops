@@ -1,8 +1,6 @@
 # Ansible playbooks
 
-This guide will demonstrate how to set up Ansible and describe some useful playbooks
-
-At first, the VMs will be independent of each other, and the plan is to subsequently set up a Kubernetes cluster to experiment with it.
+This guide will demonstrate how to set up Ansible.
 
 ## Ansible installation
 
@@ -32,6 +30,8 @@ Then, update the content of `ansible.cfg`:
 inventory = ./inventory.yaml
 ```
 
+> Example: [ansible.cfg](./ansible.cfg)
+
 Finally, place the `inventory.yaml` in the same folder. Test the configuration running:
 
 ```bash
@@ -43,6 +43,3 @@ You can also try to ping all the hosts:
 ```bash
 ansible all -m ping
 ```
-
-## Kubernetes playbooks
-
