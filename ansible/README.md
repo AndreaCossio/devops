@@ -11,6 +11,8 @@ Some key steps are:
 - Install Python 3.9+ on the local machine and the VMs (`sudo apt-get install python3`)
 - Install Ansible on the control node (`pip install ansible`)
 
+*Optional*: Install linter by running `pip install ansible-lint`.
+
 ### Configuration
 
 [Here](https://docs.ansible.com/ansible/latest/reference_appendices/config.html) you can find the official guide for configuring Ansible.
